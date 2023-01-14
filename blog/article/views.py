@@ -1,21 +1,31 @@
 from flask import Blueprint, render_template
-from blog.data.base import ARTICLES
+from flask_login import login_required
+from werkzeug.exceptions import NotFound
+from blog.models import Article, User
 
 article=Blueprint('article', __name__ , static_folder='../static', url_prefix='/article')
 
+    
 @article.route('/')
 def article_list():
-    return render_template('article/list.html', articles=ARTICLES)
-    # artic_lst=[]
-    # for article_id in ARTICLES:
-    #     artic_lst.append(ARTICLES[article_id]["title"])
-    #
-    # return render_template('article/list.html', artic_lst=artic_lst)
+    articles = Article.query.all()
+    return render_template(
+        'article/list.html',
+        articles=articles,
+    )    
 
 @article.route('/<int:pk>')
+@login_required
 def article_detail(pk:int):
-    article_id=pk
-    article_title=ARTICLES[article_id]["title"]
-    art_author=ARTICLES[article_id]["author"]
-    text=ARTICLES[article_id]["text"]
-    return render_template('article/detail.html', article_title=article_title, art_author=art_author, text=text)
+    selected_article = Article.query.filter_by(id=pk).one_or_none()
+    selected_author = User.query.filter_by(id=selected_article.author_id).one_or_none()
+    if not selected_article:
+        raise NotFound(f"Article #{pk} doesn't exist!")
+
+    return render_template(
+        'article/detail.html',
+        article=selected_article,
+        author=selected_author
+    )
+
+    
