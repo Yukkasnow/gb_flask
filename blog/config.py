@@ -11,5 +11,5 @@ DEBUG = ENV == EnvType.development
 
 SECRET_KEY = 'SECRET_KEY'
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///data.db"
+SQLALCHEMY_DATABASE_URI ="postgresql://user:password@database:5432/blog"
 SQLALCHEMY_TRACK_MODIFICATIONS = False

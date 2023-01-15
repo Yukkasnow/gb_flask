@@ -14,17 +14,6 @@ def init_db():
     db.create_all(app=app)
 
 
-@click.command('create-init-user')
-def create_init_user():
-    from blog.models import User
-    from wsgi import app
-
-    with app.app_context():
-        db.session.add(
-            User(email='name@example.com', password=generate_password_hash('test123'))
-        )
-        db.session.commit()
-
 @click.command('create-init-article')
 def create_init_user():
     from blog.models import User
@@ -32,7 +21,7 @@ def create_init_user():
 
     with app.app_context():
         db.session.add(
-            User(email='name@example.com', password=generate_password_hash('test123'))
+            User(email='name2@example.com', password=generate_password_hash('test123'))
         )
         db.session.commit()
     from blog.models import Article
@@ -47,4 +36,11 @@ def create_init_user():
        author_id=1)
         )
         
+        db.session.commit()
+    with app.app_context():
+        db.session.add(
+            User(email="admin@admin.com",
+                 password=generate_password_hash('admin'))
+        )
+
         db.session.commit()
