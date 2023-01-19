@@ -3,25 +3,14 @@ from werkzeug.security import generate_password_hash
 
 from blog.extensions import db
 
-
-@click.command('init-db')
-def init_db():
-    from wsgi import app
-
-    # import models for creating tables
-    from blog.models import User,Article
-
-    db.create_all(app=app)
-
-
 @click.command('create-init-article')
-def create_init_user():
+def create_init_article():
     from blog.models import User
     from wsgi import app
 
     with app.app_context():
         db.session.add(
-            User(email='name2@example.com', password=generate_password_hash('test123'))
+            User(first_name='test',last_name='test',email='name2@example.com', password=generate_password_hash('test123'))
         )
         db.session.commit()
     from blog.models import Article
@@ -37,10 +26,4 @@ def create_init_user():
         )
         
         db.session.commit()
-    with app.app_context():
-        db.session.add(
-            User(email="admin@admin.com",
-                 password=generate_password_hash('admin'))
-        )
 
-        db.session.commit()
